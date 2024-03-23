@@ -8,14 +8,11 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.Random;
 
 @Slf4j
 @Component
@@ -26,6 +23,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(BotConfig config){
         this.config = config;
     }
+
     public String processJson(String jsonString) throws JSONException {
         JSONArray jsonArray = new JSONArray(jsonString);
         Random random = new Random();
@@ -36,6 +34,22 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         return text;
     }
+
+    public String GetRandomJoke(String jsonString) throws JSONException {
+        JSONArray jsonArray = new JSONArray(jsonString);
+        Random random = new Random();
+        int randomIndex = random.nextInt(jsonArray.length());
+        JSONObject jsonObject = jsonArray.getJSONObject(randomIndex);
+        String text = jsonObject.getString("text");
+
+        return text;
+    }
+
+    private String getJokeFromHttp() {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject("http://localhost:8080/jokes", String.class);
+    }
+
     @Override
     public void onUpdateReceived(Update update) {
 // We check if the update has a message and the message has text
@@ -45,7 +59,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if ("/jokes".equals(messageText)) {
                 String joke = getJokeFromExternalService();
-                String jokes = null;; // Обрабатываем JSON и получаем список текстов
+                String jokes = null;
+                // Обрабатываем JSON и получаем список текстов
                 try {
                     jokes = processJson(joke);
                 } catch (JSONException e) {

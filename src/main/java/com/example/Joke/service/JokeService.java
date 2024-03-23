@@ -3,6 +3,8 @@ package com.example.Joke.service;
 import com.example.Joke.model.DBJokes;
 import com.example.Joke.repository.JokesRepositoryInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class JokeService implements JokeServiceIterface{
         jokes.save(joke);
 
     }
+
     @Override
     public List<DBJokes> getAllJokes(){
         return jokes.findAll();
@@ -43,13 +46,26 @@ public class JokeService implements JokeServiceIterface{
     @Override
     public Optional<DBJokes> editJokeById(Long id, String text) {
         Optional<DBJokes> optionalJoke = jokes.findById(id);
-        if (optionalJoke.isPresent()){
+        if (optionalJoke.isPresent()) {
             DBJokes joke = optionalJoke.get();
             joke.setText(text);
             joke.setUpdated(new Date());
             jokes.save(joke);
         }
         return optionalJoke;
+    }
+
+    public List<DBJokes> getTop5Jokes() {
+        return jokes.findFirst5ByOrderByCreatedAsc();
+
+    }
+
+    public Page<DBJokes> pagejoke(Pageable pageable) {
+        return jokes.findAll(pageable);
+    }
+
+    public DBJokes getRandomJokeDB() {
+        return jokes.getRandomJoke();
     }
 
     public long getNumberid() {

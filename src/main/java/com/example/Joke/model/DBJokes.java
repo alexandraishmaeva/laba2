@@ -14,8 +14,8 @@ import java.util.Date;
 @Table(name = "jokes")
 public class DBJokes {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "text")

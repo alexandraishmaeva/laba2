@@ -1,27 +1,18 @@
 package com.example.Joke;
 
 import lombok.Data;
+import org.json.JSONArray;
 import org.json.JSONException;
-import com.example.Joke.config.BotConfig;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Random;
 
 @Configuration
@@ -45,6 +36,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
         return text;
     }
+
     @Override
     public void onUpdateReceived(Update update) {
 // We check if the update has a message and the message has text
@@ -54,7 +46,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
             if ("/jokes".equals(messageText)) {
                 String joke = getJokeFromExternalService();
-                String jokes = null;; // Обрабатываем JSON и получаем список текстов
+                String jokes = null;// Обрабатываем JSON и получаем список текстов
                 try {
                     jokes = processJson(joke);
                 } catch (JSONException e) {
