@@ -24,7 +24,6 @@ public class JokeService implements JokeServiceIterface{
         jokes.save(joke);
 
     }
-
     @Override
     public List<DBJokes> getAllJokes(){
         return jokes.findAll();
@@ -55,6 +54,7 @@ public class JokeService implements JokeServiceIterface{
         return optionalJoke;
     }
 
+
     public List<DBJokes> getTop5Jokes() {
         return jokes.findFirst5ByOrderByCreatedAsc();
 
@@ -67,6 +67,7 @@ public class JokeService implements JokeServiceIterface{
     public DBJokes getRandomJokeDB() {
         return jokes.getRandomJoke();
     }
+
 
     public long getNumberid() {
         return jokes.count();
